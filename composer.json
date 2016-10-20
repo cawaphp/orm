@@ -1,0 +1,29 @@
+{
+    "name": "cawaphp/orm",
+    "description": "Сáша Orm",
+    "keywords": [
+        "orm",
+        "collection"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "tchiotludo"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cawa\\Orm\\": "src"
+        }
+    },
+    "require": {
+        "php": "~7.0",
+        "cawaphp/cawa" : "dev-master",
+        "cawaphp/serializer" : "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.5"
+    }
+}

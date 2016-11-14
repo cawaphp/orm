@@ -76,6 +76,18 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         return end($this->elements);
     }
 
+
+    /**
+     * Sets the internal iterator to the last element in the collection and returns this element.
+     *
+     * @return mixed
+     */
+    public function random()
+    {
+        $keys = array_keys($this->elements);
+        return $this->elements[$keys[rand(0, sizeof($keys)-1)]];
+    }
+
     /**
      * Gets the key/index of the element at the current iterator position.
      *
@@ -489,6 +501,26 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
+     * @param string $method
+     * @param mixed  $item
+     * @param bool $isMethod
+     *
+     * @return mixed
+     */
+    private function elementMethodCall(string $method, $item, bool &$isMethod = null)
+    {
+        if (is_null($isMethod)) {
+            $isMethod = method_exists($item, $method);
+        }
+
+        if ($isMethod) {
+            return call_user_func([$item, $method]) ;
+        } else {
+            return $item->$method;
+        }
+    }
+
+    /**
      * Return a new collection find by property or method value
      *
      * @param string $method property or method
@@ -501,15 +533,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         $isMethod = null;
 
         return new static(array_filter($this->elements, function($item) use ($method, $value, &$isMethod) {
-            if (is_null($isMethod)) {
-                $isMethod = method_exists($item, $method);
-            }
-
-            if ($isMethod) {
-                return call_user_func([$item, $method]) === $value;
-            } else {
-                return $item->$method === $value;
-            }
+            return $this->elementMethodCall($method, $item, $isMethod) === $value;
         }));
     }
 
@@ -739,15 +763,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         $array = [];
 
         foreach ($this->elements as $item) {
-            if (is_null($isMethod)) {
-                $isMethod = method_exists($item, $method);
-            }
-
-            if ($isMethod) {
-                $value = call_user_func([$item, $method]);
-            } else {
-                $value = $item->$method;
-            }
+            $value = $this->elementMethodCall($method, $item, $isMethod);
 
             if (!in_array($value, $array, true)) {
                 $array[] = $value;
@@ -755,6 +771,55 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         return new static(array_unique($array, SORT_REGULAR));
+    }
+
+    /**
+     * @param string $method
+     * @param bool $min
+     *
+     * @return array
+     */
+    private function getMinMax(string $method, bool $min) : array
+    {
+        $isMethod = null;
+        $returnValue = null ;
+        $returnItem = null;
+
+        foreach ($this->elements as $item) {
+            $value = $this->elementMethodCall($method, $item, $isMethod);
+
+            $ok = is_null($returnValue) ||
+                ($min && $value < $returnValue) ||
+                (!$min && $value > $returnValue);
+
+            if ($ok) {
+                $returnValue = $value;
+                $returnItem = $item;
+
+            }
+        }
+
+        return [$returnValue, $returnItem];
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return array
+     */
+    public function getMin(string $method) : array
+    {
+       return $this->getMinMax($method, true);
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return array
+     */
+    public function getMax(string $method) : array
+    {
+       return $this->getMinMax($method, false);
     }
 
     /**

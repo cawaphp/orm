@@ -630,6 +630,32 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
+     * Partitions this collection in collections according to a predicate returnr value.
+     * Keys are not preserved in the resulting collections.
+     *
+     * @param callable $callable $p The predicate on which to partition.
+     *
+     * @return $this[]|self[] An array of collection indexed by predicate return value
+     */
+    public function partitions(callable $callable) : array
+    {
+        /** @var self[] $return */
+        $return = [];
+
+        foreach ($this->elements as $key => $element) {
+            $value = $callable($element, $key);
+
+            if (!isset($return[$value])) {
+                $return[$value] = new static();
+            }
+
+            $return[$value]->add($element);
+        }
+
+        return $return;
+    }
+
+    /**
      * Extracts a slice of $length elements starting at position $offset from the Collection.
      *
      * If $length is null it returns all elements from $offset to the end of the Collection.

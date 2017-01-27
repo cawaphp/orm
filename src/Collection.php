@@ -76,7 +76,6 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         return end($this->elements);
     }
 
-
     /**
      * Sets the internal iterator to the last element in the collection and returns this element.
      *
@@ -85,6 +84,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     public function random()
     {
         $keys = array_keys($this->elements);
+
         return $this->elements[$keys[rand(0, sizeof($keys)-1)]];
     }
 
@@ -482,7 +482,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function call(string $method, ... $vars) : self
     {
-        return new static(array_map(function($element) use ($method, $vars) {
+        return new static(array_map(function ($element) use ($method, $vars) {
             return call_user_func_array([$element, $method], $vars);
         }, $this->elements));
     }
@@ -532,7 +532,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function($item) use ($method, $value, &$isMethod) {
+        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod) {
             return $this->elementMethodCall($method, $item, $isMethod) === $value;
         }));
     }
@@ -549,7 +549,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function($item) use ($method, $value, &$isMethod) {
+        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod) {
             if (is_null($isMethod)) {
                 $isMethod = method_exists($item, $method);
             }
@@ -821,7 +821,6 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             if ($ok) {
                 $returnValue = $value;
                 $returnItem = $item;
-
             }
         }
 
@@ -835,7 +834,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function getMin(string $method) : array
     {
-       return $this->getMinMax($method, true);
+        return $this->getMinMax($method, true);
     }
 
     /**
@@ -845,7 +844,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function getMax(string $method) : array
     {
-       return $this->getMinMax($method, false);
+        return $this->getMinMax($method, false);
     }
 
     /**

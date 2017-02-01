@@ -47,7 +47,11 @@ class ModelSaved
      */
     public function getType() : string
     {
-        return get_class($this->model);
+        if (defined(get_class($this->model) . '::MODEL_TYPE')) {
+            return constant(get_class($this->model) . '::MODEL_TYPE');
+        } else {
+            return get_class($this->model);
+        }
     }
 
     /**

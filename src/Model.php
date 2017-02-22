@@ -53,6 +53,18 @@ abstract class Model
     }
 
     /**
+     * @param string $pattern
+     *
+     * @return array
+     */
+    public function filterChangedProperties(string $pattern) : array
+    {
+        return array_filter($this->changedProperties, function ($key) use ($pattern) {
+            return preg_match($pattern, $key) > 0;
+        }, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
      * @param ModelSaved $model
      *
      * @return bool

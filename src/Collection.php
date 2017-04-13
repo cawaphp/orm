@@ -504,17 +504,18 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param string $method
      * @param mixed  $item
      * @param bool $isMethod
+     * @param array $args args to pass to method
      *
      * @return mixed
      */
-    private function elementMethodCall(string $method, $item, bool &$isMethod = null)
+    private function elementMethodCall(string $method, $item, bool &$isMethod = null, array $args = [])
     {
         if (is_null($isMethod)) {
             $isMethod = method_exists($item, $method);
         }
 
         if ($isMethod) {
-            return call_user_func([$item, $method]) ;
+            return call_user_func_array([$item, $method], $args) ;
         } else {
             return $item->$method;
         }
@@ -525,15 +526,16 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
+     * @param array $args args to pass to method
      *
      * @return $this|self
      */
-    public function find(string $method, $value)
+    public function find(string $method, $value, array $args = [])
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod) {
-            return $this->elementMethodCall($method, $item, $isMethod) === $value;
+        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
+            return $this->elementMethodCall($method, $item, $isMethod, $args) === $value;
         }));
     }
 
@@ -542,20 +544,21 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
+     * @param array $args args to pass to method
      *
-     * @return $this|self
+     * @return $this|Collection
      */
-    public function findDifferent(string $method, $value)
+    public function findDifferent(string $method, $value, array $args = [])
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod) {
+        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
             if (is_null($isMethod)) {
                 $isMethod = method_exists($item, $method);
             }
 
             if ($isMethod) {
-                return call_user_func([$item, $method]) !== $value;
+                return call_user_func_array([$item, $method], $args) !== $value;
             } else {
                 return $item->$method !== $value;
             }
@@ -567,12 +570,13 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
+     * @param array $args args to pass to
      *
      * @return mixed|null
      */
-    public function findOne(string $method, $value)
+    public function findOne(string $method, $value, array $args = [])
     {
-        $return = $this->find($method, $value);
+        $return = $this->find($method, $value, $args);
 
         if ($return->count() > 1) {
             throw new \OverflowException(sprintf(

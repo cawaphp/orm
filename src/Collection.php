@@ -510,6 +510,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     private function elementMethodCall(string $method, $item, bool &$isMethod = null, array $args = [])
     {
+        if (is_array($item)) {
+            return $item[$method];
+        }
+
         if (is_null($isMethod)) {
             $isMethod = method_exists($item, $method);
         }
@@ -553,15 +557,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         $isMethod = null;
 
         return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
-            if (is_null($isMethod)) {
-                $isMethod = method_exists($item, $method);
-            }
-
-            if ($isMethod) {
-                return call_user_func_array([$item, $method], $args) !== $value;
-            } else {
-                return $item->$method !== $value;
-            }
+            return $this->elementMethodCall($method, $item, $isMethod, $args) !== $value;
         }));
     }
 
@@ -738,6 +734,16 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
+     * @param bool $preserveKeys
+     *
+     * @return $this|Collection
+     */
+    public function reverse($preserveKeys = false) : self
+    {
+        return new static(array_reverse($this->elements, $preserveKeys));
+    }
+
+    /**
      * @param array $fields
      *
      * @return self
@@ -754,14 +760,18 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
         foreach ($fields as $name => $options) {
             foreach ($this->elements as $key => $element) {
-                if (!array_key_exists($name, $isMethod)) {
-                    $isMethod[$name] = method_exists($element, $name);
-                }
-
-                if ($isMethod[$name]) {
-                    $values[$name][$key] = call_user_func([$element, $name]);
+                if (is_array($element)) {
+                    $values[$name][$key] = $element[$name];
                 } else {
-                    $values[$name][$key] = $element->$name;
+                    if (!array_key_exists($name, $isMethod)) {
+                        $isMethod[$name] = method_exists($element, $name);
+                    }
+
+                    if ($isMethod[$name]) {
+                        $values[$name][$key] = call_user_func([$element, $name]);
+                    } else {
+                        $values[$name][$key] = $element->$name;
+                    }
                 }
             }
         }
@@ -783,10 +793,11 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @param string $method property or method
+     * @param bool $returnValue
      *
-     * @return $this|self
+     * @return $this|Collection
      */
-    public function getDistinct(string $method)
+    public function getDistinct(string $method, bool $returnValue = true)
     {
         $isMethod = null;
 
@@ -796,7 +807,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             $value = $this->elementMethodCall($method, $item, $isMethod);
 
             if (!in_array($value, $array, true)) {
-                $array[] = $value;
+                $array[] = $returnValue ? $value : $item;
             }
         }
 

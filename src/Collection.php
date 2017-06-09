@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace Cawa\Orm;
 
@@ -85,7 +85,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $keys = array_keys($this->elements);
 
-        return $this->elements[$keys[rand(0, sizeof($keys)-1)]];
+        return $this->elements[$keys[rand(0, sizeof($keys) - 1)]];
     }
 
     /**
@@ -121,9 +121,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Removes the element at the specified index from the collection.
      *
-     * @param string|int $key The kex/index of the element to remove.
+     * @param string|int $key the kex/index of the element to remove
      *
-     * @return mixed The removed element or NULL, if the collection did not contain the element.
+     * @return mixed the removed element or NULL, if the collection did not contain the element
      */
     public function remove($key)
     {
@@ -142,9 +142,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * The comparison is not strict (==), they have the same attributes and values,
      * and are instances of the same class.
      *
-     * @param mixed $element The element to remove.
+     * @param mixed $element the element to remove
      *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool tRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeElement($element) : bool
     {
@@ -163,9 +163,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * Removes the specified element from the collection, if it is found.
      * The comparison is strict (===), they refer to the same instance of the same class.
      *
-     * @param mixed $element The element to remove.
+     * @param mixed $element the element to remove
      *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool tRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeInstance($element) : bool
     {
@@ -181,7 +181,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Remove from current all element find by property or method value
+     * Remove from current all element find by property or method value.
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
@@ -257,10 +257,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Checks whether the collection contains an element with the specified key/index.
      *
-     * @param string|int $key The key/index to check for.
+     * @param string|int $key the key/index to check for
      *
-     * @return bool TRUE if the collection contains an element with the specified key/index,
-     *              FALSE otherwise.
+     * @return bool tRUE if the collection contains an element with the specified key/index,
+     *              FALSE otherwise
      */
     public function containsKey($key) : bool
     {
@@ -273,9 +273,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * and are instances of the same class.
      * This is an O(n) operation, where n is the size of the collection.
      *
-     * @param mixed $element The element to search for.
+     * @param mixed $element the element to search for
      *
-     * @return bool TRUE if the collection contains the element, FALSE otherwise.
+     * @return bool tRUE if the collection contains the element, FALSE otherwise
      */
     public function contains($element) : bool
     {
@@ -287,9 +287,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * The comparison is strict (===), they refer to the same instance of the same class.
      * This is an O(n) operation, where n is the size of the collection.
      *
-     * @param mixed $element The element to search for.
+     * @param mixed $element the element to search for
      *
-     * @return bool TRUE if the collection contains the element, FALSE otherwise.
+     * @return bool tRUE if the collection contains the element, FALSE otherwise
      */
     public function containsInstance($element) : bool
     {
@@ -299,9 +299,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Tests for the existence of an element that satisfies the given predicate.
      *
-     * @param callable $callable The predicate.
+     * @param callable $callable the predicate
      *
-     * @return bool TRUE if the predicate is TRUE for at least one element, FALSE otherwise.
+     * @return bool tRUE if the predicate is TRUE for at least one element, FALSE otherwise
      */
     public function exists(callable $callable) : bool
     {
@@ -315,7 +315,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Compare with current collection, add missing, remove unnecessary on current
+     * Compare with current collection, add missing, remove unnecessary on current.
      *
      * @param Collection $collection
      *
@@ -343,9 +343,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * that means not only the value but also the type must match.
      * For objects this means reference equality.
      *
-     * @param mixed $element The element to search for.
+     * @param mixed $element the element to search for
      *
-     * @return int|string|bool The key/index of the element or FALSE if the element was not found.
+     * @return int|string|bool the key/index of the element or FALSE if the element was not found
      */
     public function indexOf($element)
     {
@@ -355,7 +355,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Gets the element at the specified key/index.
      *
-     * @param string|int $key The key/index of the element to retrieve.
+     * @param string|int $key the key/index of the element to retrieve
      *
      * @return mixed
      */
@@ -367,8 +367,8 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Gets all keys/indices of the collection.
      *
-     * @return array The keys/indices of the collection, in the order of the corresponding
-     *               elements in the collection.
+     * @return array the keys/indices of the collection, in the order of the corresponding
+     *               elements in the collection
      */
     public function getKeys() : array
     {
@@ -391,8 +391,8 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Gets all values of the collection.
      *
-     * @return array The values of all elements in the collection, in the order they
-     *               appear in the collection.
+     * @return array the values of all elements in the collection, in the order they
+     *               appear in the collection
      */
     public function getValues() : array
     {
@@ -410,8 +410,8 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Sets an element in the collection at the specified key/index.
      *
-     * @param string|int $key   The key/index of the element to set.
-     * @param mixed      $value The element to set.
+     * @param string|int $key   the key/index of the element to set
+     * @param mixed      $value the element to set
      *
      * @return $this|self
      */
@@ -425,7 +425,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Adds an element at the end of the collection.
      *
-     * @param array $elements The elements to add.
+     * @param array $elements the elements to add
      *
      * @return $this|self
      */
@@ -441,7 +441,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Checks whether the collection is empty (contains no elements).
      *
-     * @return bool TRUE if the collection is empty, FALSE otherwise.
+     * @return bool tRUE if the collection is empty, FALSE otherwise
      */
     public function isEmpty() : bool
     {
@@ -473,14 +473,14 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Call the given method to each element in the collection and returns
-     * a new collection with return values for each call
+     * a new collection with return values for each call.
      *
      * @param string $method
      * @param mixed ...$vars
      *
      * @return $this|self
      */
-    public function call(string $method, ... $vars) : self
+    public function call(string $method, ...$vars) : self
     {
         return new static(array_map(function ($element) use ($method, $vars) {
             return call_user_func_array([$element, $method], $vars);
@@ -491,9 +491,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * Returns all the elements of this collection that satisfy the callable $callable.
      * The order of the elements is preserved.
      *
-     * @param callable $callable The predicate used for filtering.
+     * @param callable $callable the predicate used for filtering
      *
-     * @return $this|self A collection with the results of the filter operation.
+     * @return $this|self a collection with the results of the filter operation
      */
     public function filter(callable $callable) : self
     {
@@ -519,14 +519,14 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         if ($isMethod) {
-            return call_user_func_array([$item, $method], $args) ;
+            return call_user_func_array([$item, $method], $args);
         } else {
             return $item->$method;
         }
     }
 
     /**
-     * Return a new collection find by property or method value
+     * Return a new collection find by property or method value.
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
@@ -544,7 +544,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Return a new collection find by property or method value different
+     * Return a new collection find by property or method value different.
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
@@ -562,7 +562,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Return one element find by property or method value
+     * Return one element find by property or method value.
      *
      * @param string $method property or method
      * @param mixed $value the comparison value
@@ -589,9 +589,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Tests whether the given callable $callable holds for all elements of this collection.
      *
-     * @param callable $callable The predicate.
+     * @param callable $callable the predicate
      *
-     * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.
+     * @return bool tRUE, if the predicate yields TRUE for all elements, FALSE otherwise
      */
     public function forAll(callable $callable) : bool
     {
@@ -608,7 +608,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * Partitions this collection in two collections according to a predicate.
      * Keys are preserved in the resulting collections.
      *
-     * @param callable $callable $p The predicate on which to partition.
+     * @param callable $callable $p The predicate on which to partition
      *
      * @return $this[]|self[] An array with two elements. The first element contains the collection
      *     of elements where the predicate returned TRUE, the second element
@@ -633,7 +633,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * Partitions this collection in collections according to a predicate returnr value.
      * Keys are not preserved in the resulting collections.
      *
-     * @param callable $callable $p The predicate on which to partition.
+     * @param callable $callable $p The predicate on which to partition
      *
      * @return $this[]|self[] An array of collection indexed by predicate return value
      */
@@ -662,8 +662,8 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * Keys have to be preserved by this method. Calling this method will only return the
      * selected slice and NOT change the elements contained in the collection slice is called on.
      *
-     * @param int      $offset The offset to start from.
-     * @param int|null $length The maximum number of elements to return, or null for no limit.
+     * @param int      $offset the offset to start from
+     * @param int|null $length the maximum number of elements to return, or null for no limit
      *
      * @return $this|self
      */
@@ -690,7 +690,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Sort current collection with a callable base on values
-     * Key association is not maintains
+     * Key association is not maintains.
      *
      * @param callable $sortFunction
      *
@@ -705,7 +705,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Sort current collection with a callable base on values
-     * Key association is maintains
+     * Key association is maintains.
      *
      * @param callable $sortFunction
      *
@@ -720,7 +720,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Sort current collection with a callable base on values
-     * Key association is maintains
+     * Key association is maintains.
      *
      * @param callable $sortFunction
      *
@@ -784,7 +784,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         $return = $this->elements;
-        $args[] =& $return;
+        $args[] = &$return;
 
         call_user_func_array('array_multisort', $args);
 
@@ -823,7 +823,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     private function getMinMax(string $method, bool $min) : array
     {
         $isMethod = null;
-        $returnValue = null ;
+        $returnValue = null;
         $returnItem = null;
 
         foreach ($this->elements as $item) {

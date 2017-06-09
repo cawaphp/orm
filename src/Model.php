@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace Cawa\Orm;
 
@@ -79,7 +79,6 @@ abstract class Model
     }
 
     /**
-     * @return void
      */
     public function resetChangedProperties()
     {

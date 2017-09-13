@@ -792,6 +792,51 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
+     * Swap 2 elements by indew
+     *
+     * @param string|int $index
+     * @param string|int $newIndex
+     *
+     * @return bool
+     */
+    public function swapIndex($index, $newIndex) : bool
+    {
+        if ($newIndex < 0 || $newIndex > sizeof($this->elements))
+            return false;
+
+        $object = $this->elements[$index];
+        $newObject = $this->elements[$newIndex];
+        $this->elements[$newIndex] = $object;
+        $this->elements[$index] = $newObject;
+
+        return true;
+    }
+
+    /**
+     * Move element down
+     *
+     * @param int $index
+     *
+     * @return bool
+     */
+    public function moveDown(int $index) : bool
+    {
+        return $this->swapIndex($index, $index - 1);
+    }
+
+    /**
+     * Move element top
+     *
+     * @param int $index
+     *
+     * @return bool
+     */
+    public function moveUp(int $index) : bool
+    {
+        return $this->swapIndex($index, $index + 1);
+    }
+
+    /**
      * @param string $method property or method
      * @param bool $returnValue
      *

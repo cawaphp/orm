@@ -792,7 +792,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Swap 2 elements by indew
+     * Swap 2 elements by index
      *
      * @param string|int $index
      * @param string|int $newIndex
@@ -801,8 +801,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function swapIndex($index, $newIndex) : bool
     {
-        if ($newIndex < 0 || $newIndex > sizeof($this->elements))
+        if ($newIndex < 0 || $newIndex > sizeof($this->elements)) {
             return false;
+        }
 
         $object = $this->elements[$index];
         $newObject = $this->elements[$newIndex];

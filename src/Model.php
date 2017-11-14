@@ -13,6 +13,7 @@ declare(strict_types = 1);
 
 namespace Cawa\Orm;
 
+use Cawa\Serializer\Json;
 use Cawa\Serializer\Serializer;
 
 /**
@@ -122,7 +123,7 @@ abstract class Model
      */
     protected static function encodeData($data)
     {
-        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return Json::encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -132,6 +133,6 @@ abstract class Model
      */
     protected static function decodeData(string $data)
     {
-        return json_decode($data, true);
+        return Json::decode($data);
     }
 }

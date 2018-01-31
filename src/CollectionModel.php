@@ -97,6 +97,19 @@ class CollectionModel extends Collection
         return $return;
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clear() : parent
+    {
+        foreach ($this as $element) {
+            $this->removeInstance($element);
+        }
+
+        return parent::clear();
+    }
+
     /**
      * {@inheritdoc}
      */

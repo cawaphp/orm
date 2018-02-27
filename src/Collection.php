@@ -468,7 +468,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function apply(callable $callable) : self
     {
-        return new static(array_map($callable, $this->elements));
+        $clone = clone $this;
+        $clone->elements = array_map($callable, $this->elements);
+
+        return $clone;
     }
 
     /**
@@ -482,9 +485,12 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function call(string $method, ...$vars) : self
     {
-        return new static(array_map(function ($element) use ($method, $vars) {
+        $clone = clone $this;
+        $clone->elements = array_map(function ($element) use ($method, $vars) {
             return call_user_func_array([$element, $method], $vars);
-        }, $this->elements));
+        }, $this->elements);
+
+        return $clone;
     }
 
     /**
@@ -497,7 +503,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function filter(callable $callable) : self
     {
-        return new static(array_filter($this->elements, $callable, ARRAY_FILTER_USE_BOTH));
+        $clone = clone $this;
+        $clone->elements = array_filter($this->elements, $callable, ARRAY_FILTER_USE_BOTH);
+
+        return $clone;
     }
 
     /**
@@ -538,9 +547,12 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
+        $clone = clone $this;
+        $clone->elements = array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
             return $this->elementMethodCall($method, $item, $isMethod, $args) === $value;
-        }));
+        });
+
+        return $clone;
     }
 
     /**
@@ -556,9 +568,12 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $isMethod = null;
 
-        return new static(array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
+        $clone = clone $this;
+        $clone->elements = array_filter($this->elements, function ($item) use ($method, $value, &$isMethod, $args) {
             return $this->elementMethodCall($method, $item, $isMethod, $args) !== $value;
-        }));
+        });
+
+        return $clone;
     }
 
     /**
@@ -626,7 +641,13 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             }
         }
 
-        return [new static($matches), new static($noMatches)];
+        $a = clone $this;
+        $a->elements = $matches;
+
+        $b = clone $this;
+        $b->elements = $noMatches;
+
+        return [$a, $b];
     }
 
     /**
@@ -646,7 +667,8 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             $value = $callable($element, $key);
 
             if (!isset($return[$value])) {
-                $return[$value] = new static();
+                $return[$value] = clone $this;
+                $return[$value]->elements = [];
             }
 
             $return[$value]->add($element);
@@ -669,7 +691,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function slice($offset, $length = null) : self
     {
-        return new static(array_slice($this->elements, $offset, $length, true));
+        $clone = clone $this;
+        $clone->elements = array_slice($this->elements, $offset, $length, true);
+
+        return $clone;
     }
 
     /**
@@ -740,7 +765,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function reverse($preserveKeys = false) : self
     {
-        return new static(array_reverse($this->elements, $preserveKeys));
+        $clone = clone $this;
+        $clone->elements = array_reverse($this->elements, $preserveKeys);
+
+        return $clone;
     }
 
     /**
@@ -751,7 +779,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     public function sortBy(array $fields) : self
     {
         if ($this->count() == 0) {
-            return new static($this->elements);
+            return clone $this;
         }
 
         /** @var array|bool[] $isMethod */
@@ -788,7 +816,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 
         call_user_func_array('array_multisort', $args);
 
-        return new static($return);
+        $clone = clone $this;
+        $clone->elements = $return;
+
+        return $clone;
     }
 
     /**
@@ -857,7 +888,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             }
         }
 
-        return new static(array_unique($array, SORT_REGULAR));
+        $clone = clone $this;
+        $clone->elements = array_unique($array, SORT_REGULAR);
+
+        return $clone;
     }
 
     /**
@@ -913,7 +947,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function shuffle() : self
     {
-        $return = new static($this->elements);
+        $return = clone $this;
         shuffle($return->elements);
 
         return $return;
